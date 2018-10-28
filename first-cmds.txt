@@ -1,0 +1,70 @@
+docker run --rm hello-world
+
+docker run -ti --rm ubuntu bash
+
+docker run -ti --rm centos /bin/bash
+    cat /etc/redhat-release
+
+docker images
+
+docker pull ubuntu:12.10
+
+docker run [options] IMAGE [command] [arguments]
+
+docker start [name]
+docker stop [name]
+docker rm [name]
+docker rm -f [name] # force
+
+mkdir testdir
+echo 'From the host' > testdir/text.txt
+docker run -ti --rm -v `pwd`/testdir:/root ubuntu /bin/bash
+    ls /root
+    cat /root/text.txt
+    echo 'From container' > /root/container.txt
+    exit
+cat testdir/container.txt
+
+docker run -ti --name docker4devs -v /root ubuntu /bin/bash
+    cd /root
+    touch sample.txt
+    exit
+docker start docker4devs
+docker attach docker4devs
+    cd /root
+    ls
+
+docker volume create myvolume
+
+docker run -ti --rm -v myvolume:/opt/data ubuntu /bin/bash
+    touch /opt/data/myfile.txt
+    ls /opt/data/myfile.txt
+    exit
+docker run --rm -v myvolume:/opt/ alpine ls /opt
+
+mkdir -p networking/html
+echo '<?php phpinfo():' > networking/html/index.php
+cd networking/
+docker run -d --name app_php -v `pwd`/html:/var/www/html php:fpm
+
+docker inspect -f "{{.NetworkSettings.IPAddress}}" app_php
+
+mkdir -p config
+vi config/default.conf
+docker run -d --name app_nginx --volumes-from app_php -v `pwd`/config/default.conf:/etc/nginx/conf.d/default.conf --link app_php:phpserver nginx
+
+docker network create appnetwork
+
+docker run -d --name app_nginx --network appnetwork nginx
+
+docker run --rm -ti --network appnetwork alpine ping app_nginx
+
+docker run -d --name app_nginx1 --network-alias nginx --network appnetwork nginx
+docker run -d --name app_nginx2 --network-alias nginx --network appnetwork nginx
+docker run --rm -ti --network appnetwork alpine ping nginx
+
+docker run -ti --rm --expose=80 ubuntu /bin/bash
+
+docker run -ti --rm -p 80 ubuntu /bin/bash
+
+docker run -ti --rm -p 8080:80 ubuntu /bin/bash 
