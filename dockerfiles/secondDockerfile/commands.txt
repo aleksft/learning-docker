@@ -1,0 +1,11 @@
+We can use the Dockerfile in this folder instead:
+
+    $ docker run -d -v `pwd`:/var/www --name testphp php:fpm php -S 0.0.0.0:80 -t /var/www/html
+
+in the next way:
+
+    $ docker run -d -v `pwd`:/var/www phpdevserver
+
+    or (for override the path) 
+
+    $ docker run -d -v `pwd`:/opt/app phpdevserver -t /opt/app/html

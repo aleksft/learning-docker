@@ -1,0 +1,10 @@
+Image build:
+
+    $ docker build -t customnginx .
+
+Use this image instead a generic nginx image:
+
+    first time (delete last container)
+    $ docker rm -f nginx
+
+    $ docker run --name nginx --link phpserver:phpserver -v `pwd`:/var/www -d customnginx
