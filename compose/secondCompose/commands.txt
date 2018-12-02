@@ -1,0 +1,41 @@
+docker-compose up -d
+
+
+
+docker-compose run [compose options] [service name] [command]
+
+$ wget https://getcomposer.org/composer.phar
+$ docker-compose run --rm \
+    --entrypoint php \
+    -w /var/www \
+    phpserver \
+    composer.phar install
+
+
+
+docker-compose up -d --build
+
+
+
+docker-compose \
+  -f docker-compose.yml \
+  -f docker-compose.dev.yml \
+  run --rm composer \
+  require "robmorgan/phinx"
+
+
+
+docker-compose run --rm \
+  --entrypoint php \
+  -w /var/www \
+  phpserver \
+  vendor/bin/phinx init
+
+vim phinx.yml
+
+docker-compose run --rm \
+  --entrypoint php \
+  -w /var/www \
+  phpserver \
+  vendor/bin/phinx migrate
+
