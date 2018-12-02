@@ -1,0 +1,20 @@
+$ docker-machine create \
+    --driver digitalocean \
+    --digitalocean-access-token [token] \
+    dockerfordevs
+
+$ docker-machine ls
+
+
+
+$ docker-machine env dockerfordevs
+
+
+
+Other commands:
+
+docker-machine provision
+docker-machine scp
+docker-machine ssh
+docker-machine upgrade
+
