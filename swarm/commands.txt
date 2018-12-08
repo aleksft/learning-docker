@@ -1,0 +1,31 @@
+Initialize machine as swarm manager:
+$ docker-machine ssh manager1 # access manager1 machine
+manager1$ docker swarm init # set as swarm manager, save the given token
+
+Join a node to swarm (should be done for all nodes):
+$ docker machine ssh d4d-node1 # access d4d-node1 machine
+d4d-node1$ docker swarm join --token [token] [ip:port]
+
+check swarm:
+$ docker-machine ls
+
+
+
+Production swarm mode:
+Tag images:
+  $ docker build -t dragonmantank/pa-sampleapp:nginx -f docker/nginx/Dockerfile ./
+  $ docker build -t dragonmantank/pa-smapleapp:phpserver -f docker/php/Dockerfile ./
+
+Push images:
+  $ docker login # login hub.docker.com
+  $ docker push dragonmantank/pa-sampleapp:phpserver
+  $ docker push dragonmantank/pa-sampleapp:nginx
+
+Deploy:
+  $ docker login # login hub.docker.com
+  $ docker stack deploy -c docker-compose.yml -c docker-compose.prod.yml --with-registry-auth pa-sampleapp
+
+
+$ docker stack ps pa-sampleapp # check stack status
+
+
